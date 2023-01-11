@@ -6,7 +6,7 @@ import (
 )
 
 type DataBaseInterface interface {
-	AuthenticateUser(username string) (bool, string)
+	AuthenticateUser(username string) (bool, map[string]any)
 	RetriveRoles(username string) (bool, []string)
 }
 
@@ -16,7 +16,7 @@ type SqlDataBase struct {
 	RolesSqlQuery          string
 }
 
-func (db *SqlDataBase) AuthenticateUser(username string) (bool, string) {
+func (db *SqlDataBase) AuthenticateUser(username string) (bool, map[string]any) {
 	var password string;
 
 	row = make(map[string]string)
