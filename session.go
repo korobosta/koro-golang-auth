@@ -64,7 +64,7 @@ func SetSession(key string, value interface{}, request *http.Request) {
 
 }
 
-func setSessionBySessionId(sessionId string, key string, value interface{}, request *http.Request) {
+func setSessionBySessionId(sessionId string, key string, value string, request *http.Request) {
 	session_store[sessionId][key] = value
 
 }

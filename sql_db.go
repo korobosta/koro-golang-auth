@@ -18,13 +18,19 @@ type SqlDataBase struct {
 
 func (db *SqlDataBase) AuthenticateUser(username string) (bool, string) {
 	var password string;
-	err := db.QueryRow(db.AuthenticationSqlQuery, username).Scan(&password)
+
+	row = make(map[string]string)
+
+	row,err := db.QueryRow(db.AuthenticationSqlQuery, username)
 
 	if err != nil {
 		fmt.Printf(err.Error())
 	}
 
-	return (err == nil), password
+	fmt.Printf(row)
+
+
+	return (err == nil), row
 
 }
 

@@ -75,13 +75,13 @@ func doLogin(response http.ResponseWriter, request *http.Request, db DataBaseInt
 	redirectTarget := config.LoginPath + "?wrong=yes&redirect=" + redirectPath
 	if username != "" && password != "" {
 
-		ok, hashed_password := db.AuthenticateUser(username)
-		match := CheckPasswordHash(password, hashed_password)
+		ok, data := db.AuthenticateUser(username)
+		match := CheckPasswordHash(password, data["password"])
 		if (ok == true && match == true)  {
 
 			sessionId := generateSessionId(username)
 			setSessionId(sessionId, response)
-			setSessionBySessionId(sessionId, auth_query_result_session_key, data, request)
+			setSessionBySessionId(sessionId, auth_query_result_session_key, data["id"], request)
 			setSessionBySessionId(sessionId, username_session_key, username, request)
 
 			if config.SqlDataBaseModel.RolesSqlQuery != "" {
@@ -94,7 +94,6 @@ func doLogin(response http.ResponseWriter, request *http.Request, db DataBaseInt
 			} else {
 				redirectTarget = "/"
 			}
-
 		}
 
 	}
