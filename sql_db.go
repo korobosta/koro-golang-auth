@@ -16,15 +16,15 @@ type SqlDataBase struct {
 	RolesSqlQuery          string
 }
 
-func (db *SqlDataBase) AuthenticateUser(username string) (bool, interface{}) {
-	var result interface{}
-	err := db.QueryRow(db.AuthenticationSqlQuery, username).Scan(&result)
+func (db *SqlDataBase) AuthenticateUser(username string) (bool, string) {
+	var password string;
+	err := db.QueryRow(db.AuthenticationSqlQuery, username).Scan(&password)
 
 	if err != nil {
 		fmt.Printf(err.Error())
 	}
 
-	return (err == nil), result
+	return (err == nil), password
 
 }
 

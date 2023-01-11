@@ -5,7 +5,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-
 	"github.com/gorilla/securecookie"
 )
 
@@ -76,8 +75,8 @@ func doLogin(response http.ResponseWriter, request *http.Request, db DataBaseInt
 	redirectTarget := config.LoginPath + "?wrong=yes&redirect=" + redirectPath
 	if username != "" && password != "" {
 
-		ok, data := db.AuthenticateUser(username)
-		match := CheckPasswordHash(password, data["password"])
+		ok, password := db.AuthenticateUser(username)
+		match := CheckPasswordHash(password, password)
 		if (ok == true && match == true)  {
 
 			sessionId := generateSessionId(username)
