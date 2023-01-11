@@ -6,7 +6,7 @@ import (
 )
 
 type DataBaseInterface interface {
-	AuthenticateUser(username string) (bool, interface{})
+	AuthenticateUser(username string) (bool, string)
 	RetriveRoles(username string) (bool, []string)
 }
 
