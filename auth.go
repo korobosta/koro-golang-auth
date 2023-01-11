@@ -75,8 +75,8 @@ func doLogin(response http.ResponseWriter, request *http.Request, db DataBaseInt
 	redirectTarget := config.LoginPath + "?wrong=yes&redirect=" + redirectPath
 	if username != "" && password != "" {
 
-		ok, password := db.AuthenticateUser(username)
-		match := CheckPasswordHash(password, password)
+		ok, hashed_password := db.AuthenticateUser(username)
+		match := CheckPasswordHash(password, hashed_password)
 		if (ok == true && match == true)  {
 
 			sessionId := generateSessionId(username)
