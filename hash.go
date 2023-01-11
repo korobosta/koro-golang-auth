@@ -2,8 +2,6 @@
 package korologin
 
 import (
-    "fmt"
-
     "golang.org/x/crypto/bcrypt"
 )
 
