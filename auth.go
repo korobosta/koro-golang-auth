@@ -78,7 +78,7 @@ func doLogin(response http.ResponseWriter, request *http.Request, db DataBaseInt
 
 		ok, data := db.AuthenticateUser(username)
 		match := CheckPasswordHash(password, data["password"])
-		if ok {
+		if (ok == true && match == true)  {
 
 			sessionId := generateSessionId(username)
 			setSessionId(sessionId, response)
