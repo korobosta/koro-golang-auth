@@ -17,7 +17,7 @@ type Config struct {
 	PasswordColumnName      string
 	UsernameColumnName      string
 	UserIdColumnName        string
-	BycryptCost      int
+	BycryptCost             int
 }
 type EncryptFunction func(string) string
 
@@ -28,7 +28,7 @@ var config Config
 func Configure() *Config {
 
 	config.LoginPage = "./templates/login.html"
-	config.SessionTimeout = 120
+	config.SessionTimeout = 3600
 	config.LoginPath = "/login"
 	config.ComparePasswordFunction = CheckPasswordHash
 	config.EncryptFunction = HashPassword

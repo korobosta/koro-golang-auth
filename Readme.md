@@ -23,19 +23,19 @@ You can easily setup and customize login process with **configure()** function. 
 
 - **Login path** : login http path. Default path is ***/login***
 
-- **Password Column Field** : Column name that represents the password in the database Default  is ***password***
+- **Password Column Field** : Column name that represents the password in the database. Default  is ***password***
 
-- **Usernane Column Field** : Column name that represents the username in the database Default is ***username***
+- **Usernane Column Field** : Column name that represents the username in the database. Default is ***username***
 
-- **User Id Column Field** : Column name that represents the user id/primary key in the database Default is ***id***
+- **User Id Column Field** : Column name that represents the user id/primary key in the database. Default is ***id***
 
 - **BycryptCost** : The package uses bycrypt for hashing password. A cost is needed for hashing.  Default is ***14***
 
-- **Session timeout** : Number of seconds before the session expires. Default value is 120 seconds.
+- **Session timeout** : Number of seconds before the session expires. Default value is 3600 seconds.
 
-- **Password encryption** : Password encryption function to apply on password before it compare with password stored in db. Default is ***HashPassword***
+- **Password encryption** : Password encryption function to hash the password before storing it in the database. Default is ***HashPassword*** from bycrypt
 
-- **Compare Password** : This function compares the hashed database password and the the password the user has entered. Returns either true or false. This function takes two parameters, the first being the hashed password from the database and the plain entered password from the user Default is ***CheckPasswordHash***
+- **Compare Password Funcrion** : This function compares the hashed database password and the the password the user has entered. Returns either true or false. This function takes two parameters, the first being the hashed password from the database and the second is plain entered password by the user.  Default is ***CheckPasswordHash*** from bycrypt
 
 - **SQL connection, and SQL query to authenticate user and fetch roles** : 2 SQL queries to retrieve user and its roles by given username and password. The authentication query must return only single arbitary column, it must have a where clause with two placeholder ::username and ::password. And the query for retrieving user's roles must return only the text column of role name.
 
@@ -91,14 +91,14 @@ func main() {
 	// koroauth configuration
 	koroauth.Configure().
 		SetLoginPage("./template/login.html"). // set login page html template path
-		SetSessionTimeout(90).                 // set session expiration time in seconds
-		SetBycryptCost(14).                 // set session expiration time in seconds
+		SetSessionTimeout(3600).                 // set session expiration time in seconds
+		SetBycryptCost(14).                 // set cost for encrypting the password
 		SetLoginPath("/login").                // set login http path
+		SetUserTableName("users").                // Table name for users
 		SetPasswordColumnName("password").                // Column name of the password field
 		SetUsernameColumnName("username").                // Column name of the username field
 		SetUserIdColumnName("id").                // Column name of the user id field
-		SetUserTableName("users").                // Table name for users
-		UserTableColumns([]string{"first_name","middle_name","last_name","email","password","username"}). 
+		UserTableColumns([]string{"first_name","middle_name","last_name","email","password","username"}). // Columns in the users table
 
 	// instantiate http server
 	mux := http.NewServeMux()
@@ -168,7 +168,7 @@ func securedPage2() http.Handler {
 	})
 }
 ```
-The default EncryptFunction for hashing password HashPassword that uses bycrypt as shown below. The function takes the plain string passowrd and return a string hashed password
+The default EncryptFunction for hashing password is HashPassword that uses bycrypt as shown below. The function takes the plain string passowrd and returns a string hashed password
 
 ```Go
 import (
@@ -191,9 +191,13 @@ func MyOwnHashPasswordFunction(password string) string {
 	hashed_password = // Hash password login
 	return hashed password
 }
+
+// in main.go
+koroauth.EncryptFunction(MyOwnHashPasswordFunction)
+
 ```
 
-The default ComparePasswordFunction uses bycrypt as shown beillow
+The default ComparePasswordFunction uses bycrypt as shown below
 ```Go
 
 func CheckPasswordHash(hash, password string) bool {
