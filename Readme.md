@@ -245,4 +245,4 @@ To logout users direct them to your **login url + ?logout=yes** for example if y
 ## Todo list
 
 - Template session messaging
-- Connection to mssql, postgreSQL
+- Connection to other databases
