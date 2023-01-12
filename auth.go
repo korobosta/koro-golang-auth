@@ -1,10 +1,11 @@
-package korologin
+package koroauth
 
 import (
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+
 	"github.com/gorilla/securecookie"
 )
 
@@ -69,19 +70,24 @@ func doLogin(response http.ResponseWriter, request *http.Request, db DataBaseInt
 	username := request.FormValue("username")
 	password := request.FormValue("password")
 
-	password = config.EncryptFunction(password)
+	//password =
 
 	redirectPath := request.URL.Query().Get("redirect")
 	redirectTarget := config.LoginPath + "?wrong=yes&redirect=" + redirectPath
 	if username != "" && password != "" {
 
 		ok, data := db.AuthenticateUser(username)
-		match := CheckPasswordHash(password, data["password"])
-		if (ok == true && match == true)  {
+
+		hashed_password := data[config.PasswordColumnName].(string)
+
+		user_id := data["userId"].(string)
+
+		match := config.ComparePasswordFunction(hashed_password, password)
+		if ok == true && match == true {
 
 			sessionId := generateSessionId(username)
 			setSessionId(sessionId, response)
-			setSessionBySessionId(sessionId, auth_query_result_session_key, data["id"], request)
+			setSessionBySessionId(sessionId, auth_query_result_session_key, user_id, request)
 			setSessionBySessionId(sessionId, username_session_key, username, request)
 
 			if config.SqlDataBaseModel.RolesSqlQuery != "" {

@@ -1,4 +1,4 @@
-package korologin
+package koroauth
 
 import (
 	"crypto/md5"

@@ -1,4 +1,4 @@
-package korologin
+package koroauth
 
 import (
 	"database/sql"
@@ -6,7 +6,7 @@ import (
 )
 
 type DataBaseInterface interface {
-	AuthenticateUser(username string) (bool, map[string]any)
+	AuthenticateUser(username string) (bool, map[string]interface{})
 	RetriveRoles(username string) (bool, []string)
 }
 
@@ -16,21 +16,38 @@ type SqlDataBase struct {
 	RolesSqlQuery          string
 }
 
-func (db *SqlDataBase) AuthenticateUser(username string) (bool, map[string]any) {
-	var password string;
+func (db *SqlDataBase) AuthenticateUser(username string) (bool, map[string]interface{}) {
 
-	row = make(map[string]string)
+	var col_string string = ""
+	values := make([]string, len(config.UserTableColumns))
+	pointers := make([]interface{}, len(config.UserTableColumns))
 
-	row,err := db.QueryRow(db.AuthenticationSqlQuery, username)
+	for i, _ := range values {
+		pointers[i] = &values[i]
+	}
+
+	for _, v := range config.UserTableColumns {
+		if col_string == "" {
+			col_string = col_string + v
+		} else {
+			col_string = col_string + "," + v
+		}
+	}
+
+	var query string = "SELECT " + col_string + " from " + config.UserTableName + " WHERE username = ?"
+
+	err := db.QueryRow(query, username).Scan(pointers...)
 
 	if err != nil {
 		fmt.Printf(err.Error())
 	}
 
-	fmt.Printf(row)
+	result := make(map[string]interface{})
+	for i, val := range values {
+		result[config.UserTableColumns[i]] = val
+	}
 
-
-	return (err == nil), row
+	return (err == nil), result
 
 }
 
