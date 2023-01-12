@@ -11,7 +11,7 @@
 Get the package with following command :
 
 ```bash
-go get github.com/korobosta/koroauth
+go get github.com/korobosta/koro-golang-auth
 
 ```
 
