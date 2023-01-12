@@ -219,6 +219,9 @@ func MyOwnCheckPasswordHash(hash, password string) bool {
 	return is_authenticated
 }
 
+// in main.go
+koroauth.ComparePasswordFunction(MyOwnHashPasswordFunction)
+
 ```
 
 
