@@ -32,7 +32,7 @@ func Configure() *Config {
 	config.LoginPath = "/login"
 	config.ComparePasswordFunction = CheckPasswordHash
 	config.EncryptFunction = HashPassword
-	config.UserTableColumns = []string{"fName", "lName", "userId", "email", "password", "isActive", "username", "pfNumber"}
+	config.UserTableColumns = []string{"first_name", "last_name", "id", "email", "password", "username"}
 	config.UserTableName = "users"
 	config.PasswordColumnName = "password"
 	config.UsernameColumnName = "username"

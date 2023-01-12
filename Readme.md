@@ -98,7 +98,7 @@ func main() {
 		SetPasswordColumnName("password").                // Column name of the password field
 		SetUsernameColumnName("username").                // Column name of the username field
 		SetUserIdColumnName("id").                // Column name of the user id field
-		UserTableColumns([]string{"first_name","middle_name","last_name","email","password","username"}). // Columns in the users table
+		UserTableColumns([]string{"id","first_name","middle_name","last_name","email","password","username"}). // Columns in the users table
 
 	// instantiate http server
 	mux := http.NewServeMux()
