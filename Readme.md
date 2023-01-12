@@ -220,7 +220,7 @@ func MyOwnCheckPasswordHash(hash, password string) bool {
 }
 
 // in main.go
-koroauth.ComparePasswordFunction(MyOwnHashPasswordFunction)
+koroauth.ComparePasswordFunction(MyOwnCheckPasswordHash)
 
 ```
 
