@@ -22,6 +22,13 @@ func init() {
 	fmt.Println("Session store initialized!")
 }
 
+func SetClientSession(username string,userId int,response http.ResponseWriter, request *http.Request) {
+	sessionId := generateSessionId(username)
+	setSessionId(sessionId, response)
+	setSessionBySessionId(sessionId, auth_query_result_session_key, userId, request)
+	setSessionBySessionId(sessionId, username_session_key, username, request)
+}
+
 func generateSessionId(username string) string {
 	//now := time.Now()
 	//unix := now.Unix()
